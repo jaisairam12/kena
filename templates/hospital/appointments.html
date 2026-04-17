@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Appointments - Hospital Module{% endblock %}
+{% block page_title %}Appointment Scheduling{% endblock %}
+
+{% block content %}
+<!-- FORM CARD -->
+<div class="card-dark">
+    <div class="card-head">
+        <i class="ph-bold ph-calendar-plus"></i> Book Appointment
+    </div>
+    <form method="POST">
+        <div class="form-grid">
+            <div class="f-group">
+                <label class="f-label">Patient</label>
+                <select name="patient_id" class="f-control" required>
+                    <option value="" disabled selected>Select Patient</option>
+                    {% for p in patients %}
+                        <option value="{{ p.id }}">{{ p.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Doctor</label>
+                <select name="doctor_id" class="f-control" required>
+                    <option value="" disabled selected>Select Doctor</option>
+                    {% for d in doctors %}
+                        <option value="{{ d.id }}">{{ d.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Date</label>
+                <input type="date" name="date" class="f-control" required>
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Status</label>
+                <select name="status" class="f-control" required>
+                    <option value="Pending" selected>Pending</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+            </div>
+        </div>
+        <div style="margin-top: 24px;">
+            <button type="submit" class="btn-submit">
+                <i class="ph-bold ph-check-circle"></i> Book Appointment
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- TABLE CARD -->
+<div class="card-dark" style="padding-bottom: 0;">
+    <div class="card-head">
+        <i class="ph-bold ph-list-dashes"></i> Scheduled Appointments
+        <span class="record-badge">{{ appointments|length }} Appointments</span>
+    </div>
+    
+    {% if appointments %}
+    <div class="tbl-scroll">
+        <table class="apex-tbl">
+            <thead>
+                <tr>
+                    <th>Ref ID</th>
+                    <th>Patient Name</th>
+                    <th>Doctor Name</th>
+                    <th>Scheduled Date</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in appointments %}
+                <tr>
+                    <td>#APT-{{ a.id }}</td>
+                    <td style="font-weight: 600; color: #fff;">{{ a.patient_name }}</td>
+                    <td>{{ a.doctor_name }}</td>
+                    <td>{{ a.date[:10] if a.date else '' }}</td>
+                    <td>
+                        <span class="badge badge-{{ a.status|lower }}">{{ a.status }}</span>
+                    </td>
+                    <td style="color: var(--text-muted); font-size: .75rem;">{{ a.created_at[:16] if a.created_at else '' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="ph-duotone ph-calendar-x"></i>
+        No appointments have been scheduled yet.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

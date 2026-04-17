@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Attendance - University Module{% endblock %}
+{% block page_title %}Attendance Tracking{% endblock %}
+
+{% block content %}
+<!-- FORM CARD -->
+<div class="card-dark">
+    <div class="card-head">
+        <i class="ph-bold ph-check-square-offset"></i> Mark Attendance
+    </div>
+    <form method="POST">
+        <div class="form-grid">
+            <div class="f-group">
+                <label class="f-label">Select Student</label>
+                <select name="student_id" class="f-control" required>
+                    <option value="" disabled selected>Choose a student...</option>
+                    {% for s in students %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Date</label>
+                <input type="date" name="date" class="f-control" required>
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Status</label>
+                <select name="status" class="f-control" required>
+                    <option value="Present" selected>Present</option>
+                    <option value="Absent">Absent</option>
+                    <option value="Late">Late</option>
+                </select>
+            </div>
+        </div>
+        <div style="margin-top: 24px;">
+            <button type="submit" class="btn-submit">
+                <i class="ph-bold ph-clipboard-text"></i> Mark Attendance
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- TABLE CARD -->
+<div class="card-dark" style="padding-bottom: 0;">
+    <div class="card-head">
+        <i class="ph-bold ph-list-dashes"></i> Attendance Records
+        <span class="record-badge">{{ attendance|length }} Records</span>
+    </div>
+    
+    {% if attendance %}
+    <div class="tbl-scroll">
+        <table class="apex-tbl">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Student Name</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Recorded At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in attendance %}
+                <tr>
+                    <td>#{{ a.id }}</td>
+                    <td style="font-weight: 600; color: #fff;">{{ a.student_name }}</td>
+                    <td>{{ a.date[:10] if a.date else '' }}</td>
+                    <td>
+                        <span class="badge badge-{{ a.status|lower }}">{{ a.status }}</span>
+                    </td>
+                    <td style="color: var(--text-muted); font-size: .75rem;">{{ a.created_at[:16] if a.created_at else '' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="ph-duotone ph-clipboard-text"></i>
+        No attendance records found.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

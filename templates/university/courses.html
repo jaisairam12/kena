@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Courses - University Module{% endblock %}
+{% block page_title %}Course Management{% endblock %}
+
+{% block content %}
+<!-- FORM CARD -->
+<div class="card-dark">
+    <div class="card-head">
+        <i class="ph-bold ph-book-open"></i> Add New Course
+    </div>
+    <form method="POST">
+        <div class="form-grid">
+            <div class="f-group">
+                <label class="f-label">Course Name</label>
+                <input type="text" name="course_name" class="f-control" required placeholder="e.g. Data Structures and Algorithms">
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Credits</label>
+                <input type="number" name="credits" class="f-control" required placeholder="e.g. 4">
+            </div>
+        </div>
+        <div style="margin-top: 24px;">
+            <button type="submit" class="btn-submit">
+                <i class="ph-bold ph-floppy-disk"></i> Save Course
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- TABLE CARD -->
+<div class="card-dark" style="padding-bottom: 0;">
+    <div class="card-head">
+        <i class="ph-bold ph-list-dashes"></i> Available Courses
+        <span class="record-badge">{{ courses|length }} Courses</span>
+    </div>
+    
+    {% if courses %}
+    <div class="tbl-scroll">
+        <table class="apex-tbl">
+            <thead>
+                <tr>
+                    <th>Course ID</th>
+                    <th>Course Name</th>
+                    <th>Credits</th>
+                    <th>Date Added</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in courses %}
+                <tr>
+                    <td>#CRS-{{ c.id }}</td>
+                    <td style="font-weight: 600; color: #fff;">{{ c.course_name }}</td>
+                    <td>
+                        <span class="badge" style="background: rgba(99,102,241,.15); color: var(--accent);">{{ c.credits }} Credits</span>
+                    </td>
+                    <td style="color: var(--text-muted); font-size: .75rem;">{{ c.created_at[:16] if c.created_at else '' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="ph-duotone ph-books"></i>
+        No courses have been added yet.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

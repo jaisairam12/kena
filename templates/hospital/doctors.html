@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Doctors - Hospital Module{% endblock %}
+{% block page_title %}Doctor Management{% endblock %}
+
+{% block content %}
+<!-- FORM CARD -->
+<div class="card-dark">
+    <div class="card-head">
+        <i class="ph-bold ph-plus-circle"></i> Add New Doctor
+    </div>
+    <form method="POST">
+        <div class="form-grid">
+            <div class="f-group">
+                <label class="f-label">Doctor Name</label>
+                <input type="text" name="name" class="f-control" required placeholder="Full Name (e.g. Dr. John Doe)">
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Qualification</label>
+                <input type="text" name="qualification" class="f-control" required placeholder="e.g. MBBS, MD">
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Specialization</label>
+                <input type="text" name="specialization" class="f-control" required placeholder="e.g. Cardiology">
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Experience (Years)</label>
+                <input type="number" name="experience" class="f-control" required placeholder="e.g. 5">
+            </div>
+        </div>
+        <div style="margin-top: 24px;">
+            <button type="submit" class="btn-submit">
+                <i class="ph-bold ph-floppy-disk"></i> Save Doctor
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- TABLE CARD -->
+<div class="card-dark" style="padding-bottom: 0;">
+    <div class="card-head">
+        <i class="ph-bold ph-list-dashes"></i> Registered Doctors
+        <span class="record-badge">{{ doctors|length }} Records</span>
+    </div>
+    
+    {% if doctors %}
+    <div class="tbl-scroll">
+        <table class="apex-tbl">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Qualification</th>
+                    <th>Specialization</th>
+                    <th>Experience</th>
+                    <th>Registered At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in doctors %}
+                <tr>
+                    <td>#{{ d.id }}</td>
+                    <td style="font-weight: 600; color: #fff;">{{ d.name }}</td>
+                    <td>{{ d.qualification }}</td>
+                    <td>{{ d.specialization }}</td>
+                    <td>{{ d.experience }} yrs</td>
+                    <td style="color: var(--text-muted); font-size: .75rem;">{{ d.created_at[:16] if d.created_at else '' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="ph-duotone ph-folder-open"></i>
+        No doctor records found in the database.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Beds - Hospital Module{% endblock %}
+{% block page_title %}Bed Management{% endblock %}
+
+{% block content %}
+<!-- FORM CARD -->
+<div class="card-dark">
+    <div class="card-head">
+        <i class="ph-bold ph-bed"></i> Add Bed Entry
+    </div>
+    <form method="POST">
+        <div class="form-grid">
+            <div class="f-group">
+                <label class="f-label">Bed Number / ID</label>
+                <input type="text" name="bed_number" class="f-control" required placeholder="e.g. ICU-01, WARD-B-12">
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Status</label>
+                <select name="status" class="f-control" required>
+                    <option value="Available" selected>Available</option>
+                    <option value="Occupied">Occupied</option>
+                    <option value="Maintenance">Maintenance</option>
+                </select>
+            </div>
+        </div>
+        <div style="margin-top: 24px;">
+            <button type="submit" class="btn-submit">
+                <i class="ph-bold ph-plus"></i> Add Bed
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- TABLE CARD -->
+<div class="card-dark" style="padding-bottom: 0;">
+    <div class="card-head">
+        <i class="ph-bold ph-list-dashes"></i> Hospital Beds Status
+        <span class="record-badge">{{ beds|length }} Records</span>
+    </div>
+    
+    {% if beds %}
+    <div class="tbl-scroll">
+        <table class="apex-tbl">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Bed Number</th>
+                    <th>Status</th>
+                    <th>Last Updated</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in beds %}
+                <tr>
+                    <td>#{{ b.id }}</td>
+                    <td style="font-weight: 600; color: #fff;">{{ b.bed_number }}</td>
+                    <td>
+                        <span class="badge badge-{{ b.status|lower }}">{{ b.status }}</span>
+                    </td>
+                    <td style="color: var(--text-muted); font-size: .75rem;">{{ b.created_at[:16] if b.created_at else '' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="ph-duotone ph-bed"></i>
+        No bed records found in the system.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Faculty - University Module{% endblock %}
+{% block page_title %}Faculty Management{% endblock %}
+
+{% block content %}
+<!-- FORM CARD -->
+<div class="card-dark">
+    <div class="card-head">
+        <i class="ph-bold ph-plus-circle"></i> Add Faculty Member
+    </div>
+    <form method="POST">
+        <div class="form-grid">
+            <div class="f-group">
+                <label class="f-label">Faculty Name</label>
+                <input type="text" name="name" class="f-control" required placeholder="Full Name (e.g. Prof. Alan Turing)">
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Department</label>
+                <input type="text" name="department" class="f-control" required placeholder="e.g. Computer Science, Physics">
+            </div>
+        </div>
+        <div style="margin-top: 24px;">
+            <button type="submit" class="btn-submit">
+                <i class="ph-bold ph-floppy-disk"></i> Add Faculty
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- TABLE CARD -->
+<div class="card-dark" style="padding-bottom: 0;">
+    <div class="card-head">
+        <i class="ph-bold ph-list-dashes"></i> Faculty Members
+        <span class="record-badge">{{ faculty|length }} Members</span>
+    </div>
+    
+    {% if faculty %}
+    <div class="tbl-scroll">
+        <table class="apex-tbl">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Date Added</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in faculty %}
+                <tr>
+                    <td>#FAC-{{ f.id }}</td>
+                    <td style="font-weight: 600; color: #fff;">{{ f.name }}</td>
+                    <td>{{ f.department }}</td>
+                    <td style="color: var(--text-muted); font-size: .75rem;">{{ f.created_at[:16] if f.created_at else '' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="ph-duotone ph-chalkboard-teacher"></i>
+        No faculty members added yet.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

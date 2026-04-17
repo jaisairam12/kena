@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Patients - Hospital Module{% endblock %}
+{% block page_title %}Patient Management{% endblock %}
+
+{% block content %}
+<!-- FORM CARD -->
+<div class="card-dark">
+    <div class="card-head">
+        <i class="ph-bold ph-plus-circle"></i> Register New Patient
+    </div>
+    <form method="POST">
+        <div class="form-grid">
+            <div class="f-group">
+                <label class="f-label">Patient Name</label>
+                <input type="text" name="name" class="f-control" required placeholder="Enter full name">
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Age</label>
+                <input type="number" name="age" class="f-control" required placeholder="e.g., 34">
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Disease / Condition</label>
+                <input type="text" name="disease" class="f-control" required placeholder="Diagaonosis">
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Contact Number</label>
+                <input type="text" name="contact" class="f-control" required placeholder="Phone number">
+            </div>
+        </div>
+        <div style="margin-top: 24px;">
+            <button type="submit" class="btn-submit">
+                <i class="ph-bold ph-floppy-disk"></i> Save Patient
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- TABLE CARD -->
+<div class="card-dark" style="padding-bottom: 0;">
+    <div class="card-head">
+        <i class="ph-bold ph-list-dashes"></i> Registered Patients
+        <span class="record-badge">{{ patients|length }} Records</span>
+    </div>
+    
+    {% if patients %}
+    <div class="tbl-scroll">
+        <table class="apex-tbl">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Disease</th>
+                    <th>Contact</th>
+                    <th>Registered At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in patients %}
+                <tr>
+                    <td>#{{ p.id }}</td>
+                    <td style="font-weight: 600; color: #fff;">{{ p.name }}</td>
+                    <td>{{ p.age }} yrs</td>
+                    <td>{{ p.disease }}</td>
+                    <td>{{ p.contact }}</td>
+                    <td style="color: var(--text-muted); font-size: .75rem;">{{ p.created_at[:16] if p.created_at else '' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="ph-duotone ph-folder-open"></i>
+        No patient records found in the database.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

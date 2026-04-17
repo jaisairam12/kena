@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Fees - University Module{% endblock %}
+{% block page_title %}Fee Management{% endblock %}
+
+{% block content %}
+<!-- FORM CARD -->
+<div class="card-dark">
+    <div class="card-head">
+        <i class="ph-bold ph-currency-circle-dollar"></i> Record Fee Payment
+    </div>
+    <form method="POST">
+        <div class="form-grid">
+            <div class="f-group">
+                <label class="f-label">Select Student</label>
+                <select name="student_id" class="f-control" required>
+                    <option value="" disabled selected>Choose a student...</option>
+                    {% for s in students %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Amount (₹)</label>
+                <input type="number" step="0.01" name="amount" class="f-control" required placeholder="e.g. 25000.00">
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Payment Status</label>
+                <select name="status" class="f-control" required>
+                    <option value="Paid" selected>Paid</option>
+                    <option value="Unpaid">Unpaid</option>
+                    <option value="Partial">Partial</option>
+                </select>
+            </div>
+        </div>
+        <div style="margin-top: 24px;">
+            <button type="submit" class="btn-submit">
+                <i class="ph-bold ph-receipt"></i> Save Fee Record
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- TABLE CARD -->
+<div class="card-dark" style="padding-bottom: 0;">
+    <div class="card-head">
+        <i class="ph-bold ph-list-dashes"></i> Fee Records
+        <span class="record-badge">{{ fees|length }} Records</span>
+    </div>
+    
+    {% if fees %}
+    <div class="tbl-scroll">
+        <table class="apex-tbl">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Student Name</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date Recorded</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in fees %}
+                <tr>
+                    <td>#FEE-{{ f.id }}</td>
+                    <td style="font-weight: 600; color: #fff;">{{ f.student_name }}</td>
+                    <td style="color: var(--success); font-weight: 600;">₹{{ "%.2f"|format(f.amount) }}</td>
+                    <td>
+                        <span class="badge badge-{{ f.status|lower }}">{{ f.status }}</span>
+                    </td>
+                    <td style="color: var(--text-muted); font-size: .75rem;">{{ f.created_at[:16] if f.created_at else '' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="ph-duotone ph-currency-circle-dollar"></i>
+        No fee records found in the system.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

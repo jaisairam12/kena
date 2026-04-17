@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Students - University Module{% endblock %}
+{% block page_title %}Student Management{% endblock %}
+
+{% block content %}
+<!-- FORM CARD -->
+<div class="card-dark">
+    <div class="card-head">
+        <i class="ph-bold ph-user-plus"></i> Register New Student
+    </div>
+    <form method="POST">
+        <div class="form-grid">
+            <div class="f-group">
+                <label class="f-label">Student Name</label>
+                <input type="text" name="name" class="f-control" required placeholder="Full Name">
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Course / Degree</label>
+                <input type="text" name="course" class="f-control" required placeholder="e.g. B.Tech Computer Science">
+            </div>
+            
+            <div class="f-group">
+                <label class="f-label">Year of Study</label>
+                <input type="number" name="year" class="f-control" required placeholder="e.g. 1, 2, 3">
+            </div>
+        </div>
+        <div style="margin-top: 24px;">
+            <button type="submit" class="btn-submit">
+                <i class="ph-bold ph-floppy-disk"></i> Register Student
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- TABLE CARD -->
+<div class="card-dark" style="padding-bottom: 0;">
+    <div class="card-head">
+        <i class="ph-bold ph-list-dashes"></i> Enrolled Students
+        <span class="record-badge">{{ students|length }} Students</span>
+    </div>
+    
+    {% if students %}
+    <div class="tbl-scroll">
+        <table class="apex-tbl">
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Course</th>
+                    <th>Year</th>
+                    <th>Registration Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in students %}
+                <tr>
+                    <td>#STD-{{ s.id }}</td>
+                    <td style="font-weight: 600; color: #fff;">{{ s.name }}</td>
+                    <td>{{ s.course }}</td>
+                    <td>Year {{ s.year }}</td>
+                    <td style="color: var(--text-muted); font-size: .75rem;">{{ s.created_at[:16] if s.created_at else '' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="ph-duotone ph-student"></i>
+        No students registered yet.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ApexCare ERP{% endblock %}</title>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <a href="{{ url_for('dashboard') }}" class="sidebar-brand">
+            <div class="brand-icon"><i class="ph-bold ph-activity"></i></div>
+            <div class="brand-text">
+                <strong>ApexCare ERP</strong>
+                <span>Hospital & University</span>
+            </div>
+        </a>
+
+        <div class="sb-section">
+            <a href="{{ url_for('dashboard') }}" class="sb-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                <i class="ph ph-squares-four"></i> Dashboard
+            </a>
+        </div>
+
+        <hr class="sb-divider">
+
+        <div class="sb-section">
+            <div class="sb-label">Hospital</div>
+            <a href="{{ url_for('patients') }}" class="sb-link {% if request.endpoint == 'patients' %}active{% endif %}">
+                <i class="ph ph-users"></i> Patients
+            </a>
+            <a href="{{ url_for('doctors') }}" class="sb-link {% if request.endpoint == 'doctors' %}active{% endif %}">
+                <i class="ph ph-stethoscope"></i> Doctors
+            </a>
+            <a href="{{ url_for('appointments') }}" class="sb-link {% if request.endpoint == 'appointments' %}active{% endif %}">
+                <i class="ph ph-calendar-check"></i> Appointments
+            </a>
+            <a href="{{ url_for('beds') }}" class="sb-link {% if request.endpoint == 'beds' %}active{% endif %}">
+                <i class="ph ph-bed"></i> Bed Management
+            </a>
+        </div>
+
+        <hr class="sb-divider">
+
+        <div class="sb-section">
+            <div class="sb-label">University</div>
+            <a href="{{ url_for('students') }}" class="sb-link {% if request.endpoint == 'students' %}active{% endif %}">
+                <i class="ph ph-student"></i> Students
+            </a>
+            <a href="{{ url_for('faculty') }}" class="sb-link {% if request.endpoint == 'faculty' %}active{% endif %}">
+                <i class="ph ph-chalkboard-teacher"></i> Faculty
+            </a>
+            <a href="{{ url_for('courses') }}" class="sb-link {% if request.endpoint == 'courses' %}active{% endif %}">
+                <i class="ph ph-books"></i> Courses
+            </a>
+            <a href="{{ url_for('attendance') }}" class="sb-link {% if request.endpoint == 'attendance' %}active{% endif %}">
+                <i class="ph ph-check-square-offset"></i> Attendance
+            </a>
+            <a href="{{ url_for('fees') }}" class="sb-link {% if request.endpoint == 'fees' %}active{% endif %}">
+                <i class="ph ph-currency-circle-dollar"></i> Fees
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+        <header class="top-bar">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <button class="hamburger" id="hamburger"><i class="ph ph-list"></i></button>
+                <div class="top-bar-title">{% block page_title %}{% endblock %}</div>
+            </div>
+            
+            <div class="top-bar-right">
+                <span class="user-name">Hello, <strong>{{ session.username }}</strong></span>
+                <div class="avatar">{{ session.username[0]|upper }}</div>
+                <a href="{{ url_for('logout') }}" class="btn-logout"><i class="ph ph-sign-out"></i> Logout</a>
+            </div>
+        </header>
+
+        <section class="content">
+            <!-- Global Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert-box alert-{{ category }}">
+                            <i class="ph-fill ph-info"></i> {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- Page Specific Alert (from msg/msg_type variables) -->
+            {% if msg %}
+                <div class="alert-box alert-{{ msg_type }}">
+                    <i class="ph-fill ph-info"></i> {{ msg }}
+                </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </section>
+    </main>
+
+    <script>
+        // Hamburger Menu Toggle
+        document.getElementById('hamburger').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('open');
+        });
+    </script>
+</body>
+</html>
