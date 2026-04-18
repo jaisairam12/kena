@@ -12,7 +12,7 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
-        <a href="{{ url_for('dashboard') }}" class="sidebar-brand">
+        <a href="{{ url_for('dashboard.dashboard') }}" class="sidebar-brand">
             <div class="brand-icon"><i class="ph-bold ph-activity"></i></div>
             <div class="brand-text">
                 <strong>ApexCare ERP</strong>
@@ -21,7 +21,7 @@
         </a>
 
         <div class="sb-section">
-            <a href="{{ url_for('dashboard') }}" class="sb-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
+            <a href="{{ url_for('dashboard.dashboard') }}" class="sb-link {% if request.endpoint == 'dashboard.dashboard' %}active{% endif %}">
                 <i class="ph ph-squares-four"></i> Dashboard
             </a>
         </div>
@@ -30,16 +30,16 @@
 
         <div class="sb-section">
             <div class="sb-label">Hospital</div>
-            <a href="{{ url_for('patients') }}" class="sb-link {% if request.endpoint == 'patients' %}active{% endif %}">
+            <a href="{{ url_for('hospital.patients') }}" class="sb-link {% if request.endpoint == 'hospital.patients' %}active{% endif %}">
                 <i class="ph ph-users"></i> Patients
             </a>
-            <a href="{{ url_for('doctors') }}" class="sb-link {% if request.endpoint == 'doctors' %}active{% endif %}">
+            <a href="{{ url_for('hospital.doctors') }}" class="sb-link {% if request.endpoint == 'hospital.doctors' %}active{% endif %}">
                 <i class="ph ph-stethoscope"></i> Doctors
             </a>
-            <a href="{{ url_for('appointments') }}" class="sb-link {% if request.endpoint == 'appointments' %}active{% endif %}">
+            <a href="{{ url_for('hospital.appointments') }}" class="sb-link {% if request.endpoint == 'hospital.appointments' %}active{% endif %}">
                 <i class="ph ph-calendar-check"></i> Appointments
             </a>
-            <a href="{{ url_for('beds') }}" class="sb-link {% if request.endpoint == 'beds' %}active{% endif %}">
+            <a href="{{ url_for('hospital.beds') }}" class="sb-link {% if request.endpoint == 'hospital.beds' %}active{% endif %}">
                 <i class="ph ph-bed"></i> Bed Management
             </a>
         </div>
@@ -48,19 +48,19 @@
 
         <div class="sb-section">
             <div class="sb-label">University</div>
-            <a href="{{ url_for('students') }}" class="sb-link {% if request.endpoint == 'students' %}active{% endif %}">
+            <a href="{{ url_for('university.students') }}" class="sb-link {% if request.endpoint == 'university.students' %}active{% endif %}">
                 <i class="ph ph-student"></i> Students
             </a>
-            <a href="{{ url_for('faculty') }}" class="sb-link {% if request.endpoint == 'faculty' %}active{% endif %}">
+            <a href="{{ url_for('university.faculty') }}" class="sb-link {% if request.endpoint == 'university.faculty' %}active{% endif %}">
                 <i class="ph ph-chalkboard-teacher"></i> Faculty
             </a>
-            <a href="{{ url_for('courses') }}" class="sb-link {% if request.endpoint == 'courses' %}active{% endif %}">
+            <a href="{{ url_for('university.courses') }}" class="sb-link {% if request.endpoint == 'university.courses' %}active{% endif %}">
                 <i class="ph ph-books"></i> Courses
             </a>
-            <a href="{{ url_for('attendance') }}" class="sb-link {% if request.endpoint == 'attendance' %}active{% endif %}">
+            <a href="{{ url_for('university.attendance') }}" class="sb-link {% if request.endpoint == 'university.attendance' %}active{% endif %}">
                 <i class="ph ph-check-square-offset"></i> Attendance
             </a>
-            <a href="{{ url_for('fees') }}" class="sb-link {% if request.endpoint == 'fees' %}active{% endif %}">
+            <a href="{{ url_for('university.fees') }}" class="sb-link {% if request.endpoint == 'university.fees' %}active{% endif %}">
                 <i class="ph ph-currency-circle-dollar"></i> Fees
             </a>
         </div>
@@ -75,30 +75,38 @@
             </div>
             
             <div class="top-bar-right">
+                <!-- Search feature integration -->
+                <div class="search-wrap">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input type="text" id="globalSearch" placeholder="Search tables..." class="search-input">
+                </div>
+                <!-- Profile -->
                 <span class="user-name">Hello, <strong>{{ session.username }}</strong></span>
-                <div class="avatar">{{ session.username[0]|upper }}</div>
-                <a href="{{ url_for('logout') }}" class="btn-logout"><i class="ph ph-sign-out"></i> Logout</a>
+                <div class="avatar">{{ session.username[0]|upper if session.username else 'A' }}</div>
+                <a href="{{ url_for('auth.logout') }}" class="btn-logout"><i class="ph ph-sign-out"></i> Logout</a>
             </div>
         </header>
 
         <section class="content">
             <!-- Global Flash Messages -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert-box alert-{{ category }}">
-                            <i class="ph-fill ph-info"></i> {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
+            <div id="toast-container">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert-box alert-{{ category }}">
+                                <i class="ph-fill ph-info"></i> {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
 
-            <!-- Page Specific Alert (from msg/msg_type variables) -->
-            {% if msg %}
-                <div class="alert-box alert-{{ msg_type }}">
-                    <i class="ph-fill ph-info"></i> {{ msg }}
-                </div>
-            {% endif %}
+                <!-- Page Specific Alert (from msg/msg_type variables) -->
+                {% if msg %}
+                    <div class="alert-box alert-{{ msg_type }}">
+                        <i class="ph-fill ph-info"></i> {{ msg }}
+                    </div>
+                {% endif %}
+            </div>
 
             {% block content %}{% endblock %}
         </section>
@@ -108,6 +116,62 @@
         // Hamburger Menu Toggle
         document.getElementById('hamburger').addEventListener('click', function() {
             document.getElementById('sidebar').classList.toggle('open');
+        });
+
+        // Auto Dismiss Toasts via Animation
+        setTimeout(() => {
+            const toasts = document.querySelectorAll('.alert-box');
+            toasts.forEach(toast => {
+                toast.style.animation = 'slideUp 0.4s forwards';
+                setTimeout(() => toast.remove(), 400);
+            });
+        }, 4000);
+
+        // Global Table Search
+        const searchInput = document.getElementById('globalSearch');
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function() {
+                const filter = this.value.toLowerCase();
+                const tables = document.querySelectorAll('.apex-tbl');
+                tables.forEach(table => {
+                    const rows = table.getElementsByTagName('tr');
+                    for (let i = 1; i < rows.length; i++) { // Skip header
+                        const cells = rows[i].getElementsByTagName('td');
+                        let match = false;
+                        for (let j = 0; j < cells.length; j++) {
+                            if (cells[j].textContent.toLowerCase().indexOf(filter) > -1) {
+                                match = true;
+                                break;
+                            }
+                        }
+                        rows[i].style.display = match ? '' : 'none';
+                    }
+                });
+            });
+        }
+
+        // Animated Counters
+        const counters = document.querySelectorAll('.stat-num');
+        const speed = 20; 
+        counters.forEach(counter => {
+            const updateCount = () => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const inc = target / speed;
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + inc);
+                    setTimeout(updateCount, 15);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            
+            // Set dynamic target attribute if not preset
+            if(!counter.getAttribute('data-target')){
+                counter.setAttribute('data-target', counter.innerText);
+                counter.innerText = '0';
+            }
+            updateCount();
         });
     </script>
 </body>

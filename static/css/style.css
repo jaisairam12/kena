@@ -35,7 +35,33 @@
   --radius-md  : 10px;
   --radius-sm  : 6px;
   --shadow-card: 0 4px 32px rgba(0,0,0,0.45);
-  --transition : all 0.22s cubic-bezier(0.4,0,0.2,1);
+  --transition : all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --glass-bg   : rgba(24, 28, 46, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Animation Classes ───────────────────────────────────── */
+.fade-in { animation: fadeIn 0.6s ease-out forwards; opacity: 0; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.stagger-in > * {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+}
+.stagger-in > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-in > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-in > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-in > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-in > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-in > *:nth-child(n+6) { animation-delay: 0.6s; }
+
+/* ── Premium Glassmorphism ───────────────────────────────── */
+.glassmorphism {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 /* ── Reset ───────────────────────────────────────────────── */
@@ -142,6 +168,18 @@ body {
 .top-bar-title { font-size: .92rem; font-weight: 600; color: var(--text-h); }
 .top-bar-right { display: flex; align-items: center; gap: 14px; }
 
+/* Search Integration */
+.search-wrap {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg-input); padding: 6px 14px;
+  border-radius: 20px; border: 1px solid var(--border);
+  transition: var(--transition);
+}
+.search-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+.search-wrap i { color: var(--text-muted); font-size: 1.1rem; }
+.search-input { background: none; border: none; color: var(--text-h); outline: none; font-size: .85rem; width: 180px; }
+.search-input::placeholder { color: var(--text-muted); }
+
 .avatar {
   width: 34px; height: 34px;
   background: var(--accent-grd);
@@ -183,12 +221,14 @@ body {
    CARDS
 ══════════════════════════════════════════════════════════ */
 .card-dark {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   padding: 26px;
   margin-bottom: 24px;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   transition: var(--transition);
 }
 .card-dark:hover { border-color: var(--border-h); }

@@ -4,74 +4,74 @@
 {% block page_title %}Overview Dashboard{% endblock %}
 
 {% block content %}
-<div class="page-head">
+<div class="page-head fade-in">
     <h1 class="page-title">Welcome back, {{ session.username }}!</h1>
     <p class="page-sub">Here is the latest overview of the hospital and university operations.</p>
 </div>
 
-<div class="stats-grid">
+<div class="stats-grid stagger-in">
     <!-- Hospital Stats -->
-    <div class="stat-card">
+    <div class="stat-card glassmorphism">
         <div class="stat-icon" style="color: var(--accent);"><i class="ph-fill ph-users"></i></div>
-        <div class="stat-num">{{ stats.patients }}</div>
+        <div class="stat-num" data-target="{{ stats.patients }}">0</div>
         <div class="stat-lbl">Registered Patients</div>
     </div>
     
-    <div class="stat-card">
+    <div class="stat-card glassmorphism">
         <div class="stat-icon" style="color: var(--info);"><i class="ph-fill ph-stethoscope"></i></div>
-        <div class="stat-num">{{ stats.doctors }}</div>
+        <div class="stat-num" data-target="{{ stats.doctors }}">0</div>
         <div class="stat-lbl">Active Doctors</div>
     </div>
     
-    <div class="stat-card">
+    <div class="stat-card glassmorphism">
         <div class="stat-icon" style="color: var(--warning);"><i class="ph-fill ph-calendar-check"></i></div>
-        <div class="stat-num">{{ stats.appointments }}</div>
+        <div class="stat-num" data-target="{{ stats.appointments }}">0</div>
         <div class="stat-lbl">Appointments</div>
     </div>
 
-    <div class="stat-card">
+    <div class="stat-card glassmorphism">
         <div class="stat-icon" style="color: var(--danger);"><i class="ph-fill ph-bed"></i></div>
-        <div class="stat-num">{{ stats.beds }}</div>
+        <div class="stat-num" data-target="{{ stats.beds }}">0</div>
         <div class="stat-lbl">Hospital Beds</div>
     </div>
 
     <!-- University Stats -->
-    <div class="stat-card" style="margin-top: 10px;">
+    <div class="stat-card glassmorphism" style="margin-top: 10px;">
         <div class="stat-icon" style="color: var(--success);"><i class="ph-fill ph-student"></i></div>
-        <div class="stat-num">{{ stats.students }}</div>
+        <div class="stat-num" data-target="{{ stats.students }}">0</div>
         <div class="stat-lbl">Total Students</div>
     </div>
 
-    <div class="stat-card" style="margin-top: 10px;">
+    <div class="stat-card glassmorphism" style="margin-top: 10px;">
         <div class="stat-icon" style="color: var(--accent-2);"><i class="ph-fill ph-chalkboard-teacher"></i></div>
-        <div class="stat-num">{{ stats.faculty }}</div>
+        <div class="stat-num" data-target="{{ stats.faculty }}">0</div>
         <div class="stat-lbl">Faculty Members</div>
     </div>
 
-    <div class="stat-card" style="margin-top: 10px;">
+    <div class="stat-card glassmorphism" style="margin-top: 10px;">
         <div class="stat-icon" style="color: #ec4899;"><i class="ph-fill ph-books"></i></div>
-        <div class="stat-num">{{ stats.courses }}</div>
+        <div class="stat-num" data-target="{{ stats.courses }}">0</div>
         <div class="stat-lbl">Courses Offered</div>
     </div>
 
-    <div class="stat-card" style="margin-top: 10px;">
+    <div class="stat-card glassmorphism" style="margin-top: 10px;">
         <div class="stat-icon" style="color: #14b8a6;"><i class="ph-fill ph-currency-circle-dollar"></i></div>
-        <div class="stat-num">{{ stats.fees }}</div>
+        <div class="stat-num" data-target="{{ stats.fees }}">0</div>
         <div class="stat-lbl">Fee Records</div>
     </div>
 </div>
 
-<div class="mod-grid">
-    <div class="mod-card">
+<div class="mod-grid stagger-in" style="animation-delay: 0.2s;">
+    <div class="mod-card glassmorphism">
         <h5>Hospital Management</h5>
         <p>Manage patient records, doctor schedules, handle appointments efficiently, and monitor bed availability in real-time.</p>
-        <a href="{{ url_for('patients') }}" class="mod-link">Manage Patients <i class="ph ph-arrow-right"></i></a>
+        <a href="{{ url_for('hospital.patients') }}" class="mod-link">Manage Patients <i class="ph ph-arrow-right"></i></a>
     </div>
 
-    <div class="mod-card">
+    <div class="mod-card glassmorphism">
         <h5>University Administration</h5>
         <p>Keep track of student enrollments, faculty mapping, course registrations, attendance logs, and fee collections.</p>
-        <a href="{{ url_for('students') }}" class="mod-link">Manage Students <i class="ph ph-arrow-right"></i></a>
+        <a href="{{ url_for('university.students') }}" class="mod-link">Manage Students <i class="ph ph-arrow-right"></i></a>
     </div>
 </div>
 {% endblock %}

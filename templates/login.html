@@ -10,7 +10,7 @@
 </head>
 <body class="login-page">
 
-    <div class="login-card">
+    <div class="login-card glassmorphism">
         <div class="login-logo">
             <div class="login-icon"><i class="ph-bold ph-activity" style="color:#fff;"></i></div>
             <h2>ApexCare ERP</h2>
@@ -27,7 +27,7 @@
             {% endif %}
         {% endwith %}
 
-        <form method="POST" action="{{ url_for('login') }}">
+        <form method="POST" action="{{ url_for('auth.login') }}">
             <div class="f-group" style="margin-bottom: 20px;">
                 <label class="f-label">Username</label>
                 <input type="text" name="username" class="f-control" required placeholder="Enter your username">
