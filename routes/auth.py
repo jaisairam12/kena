@@ -18,10 +18,13 @@ def login():
             return render_template('login.html')
 
         db = get_db()
-        user = db.execute(
-            "SELECT * FROM users WHERE username = ? AND password = ?",
+        cursor = db.cursor()
+        cursor.execute(
+            "SELECT * FROM users WHERE username = %s AND password = %s",
             (username, password)
-        ).fetchone()
+        )
+        user = cursor.fetchone()
+        cursor.close()
 
         if user:
             session['logged_in'] = True

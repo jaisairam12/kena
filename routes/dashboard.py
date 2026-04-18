@@ -8,6 +8,7 @@ dashboard_bp = Blueprint('dashboard', __name__)
 @login_required
 def dashboard():
     db = get_db()
+    cursor = db.cursor()
     stats = {}
     for key, table in [
         ('patients', 'patients'), ('doctors', 'doctors'),
@@ -15,5 +16,9 @@ def dashboard():
         ('students', 'students'), ('faculty', 'faculty'),
         ('courses', 'courses'), ('fees', 'fees'),
     ]:
-        stats[key] = db.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
+        cursor.execute(f"SELECT COUNT(*) AS total FROM {table}")
+        result = cursor.fetchone()
+        stats[key] = result['total'] if result else 0
+        
+    cursor.close()
     return render_template('dashboard.html', stats=stats)
