@@ -24,6 +24,8 @@ def create_app():
 
 app = create_app()
 
+# Initialize DB unconditionally so Vercel Serverless automatically creates tables on deploy!
+init_db(app)
+
 if __name__ == '__main__':
-    init_db(app)            # Create tables + seed admin on first run
     app.run(debug=True)
