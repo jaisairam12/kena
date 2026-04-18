@@ -68,11 +68,17 @@ def get_db():
                 )
             except pymysql.MySQLError as e:
                 print(f"[DB] PyMySQL Cloud Connect Error, safely falling back to local SQLite: {e}")
-                db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'apexcare.db')
+                if os.environ.get('VERCEL') == '1':
+                    db_path = '/tmp/apexcare.db'
+                else:
+                    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'apexcare.db')
                 g.db = SQLiteDBWrapper(db_path)
         else:
             # Safely use SQLite natively if operating locally
-            db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'apexcare.db')
+            if os.environ.get('VERCEL') == '1':
+                db_path = '/tmp/apexcare.db'
+            else:
+                db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'apexcare.db')
             g.db = SQLiteDBWrapper(db_path)
     return g.db
 
